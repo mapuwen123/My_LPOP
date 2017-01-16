@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">LPOP纸片</string>
+
+    <string name="login">微博登录</string>
+    <string name="weibosdk_demo_toast_auth_failed">授权失败</string>
+    <string name="weibosdk_demo_toast_auth_success">授权成功</string>
+    <string name="weibosdk_demo_access_token_is_empty">Access Token 不存在，请先登录</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="drawer_open">打开</string>
+    <string name="drawer_close">关闭</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- Time -->
+    <string name="just_now">刚刚</string>
+    <string name="min">分钟前</string>
+    <string name="hour">小时前</string>
+    <string name="day">天前</string>
+    <string name="month">月前</string>
+    <string name="year">年前</string>
+    <string name="today">今天</string>
+    <string name="yesterday">昨天</string>
+    <string name="the_day_before_yesterday">前天</string>
+
+    <string name="menu_action_user_home">取消关注</string>
+
+</resources>
