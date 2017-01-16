@@ -48,7 +48,7 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
                 .load(status.user.profile_image_url)
                 .transform(new GlideCircleTransform(context))
                 .into((ImageView) baseViewHolder.getView(R.id.profile_img));
-        //昵称
+        //昵称阿嘎是个大纲是的噶高达
         baseViewHolder.setText(R.id.profile_name, status.user.screen_name);
         //时间
         baseViewHolder.setText(R.id.profile_time, TimeUtils.instance(context).buildTimeString(status.created_at) + "  ");
