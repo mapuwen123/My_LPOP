@@ -28,16 +28,20 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     private AuthInfo mAuthInfo;
 
-    /** 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能  */
+    /**
+     * 封装了 "access_token"，"expires_in"，"refresh_token"，并提供了他们的管理功能
+     */
     private Oauth2AccessToken mAccessToken;
 
-    /** 注意：SsoHandler 仅当 SDK 支持 SSO 时有效 */
+    /**
+     * 注意：SsoHandler 仅当 SDK 支持 SSO 时有效
+     */
     private SsoHandler mSsoHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
             //透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

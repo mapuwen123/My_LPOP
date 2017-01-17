@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.mapuw.lpop.R;
 import com.mapuw.lpop.ui.userhome.UserHomeActivity;
+import com.mapuw.lpop.ui.website.WebSiteActivity;
 import com.mapuw.lpop.utils.DensityUtil;
 import com.mapuw.lpop.utils.LogUtil;
 
@@ -106,7 +107,9 @@ public class WeiBoContentTextUtil {
                 WeiBoContentClickableSpan clickableSpan = new WeiBoContentClickableSpan(context) {
                     @Override
                     public void onClick(View widget) {
-                        Toast.makeText(context, "查看全文" + alltexts[1], Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(context, WebSiteActivity.class);
+                        intent.putExtra("WEBSITE", alltexts[1]);
+                        context.startActivity(intent);
                     }
                 };
                 spannableStringBuilder.replace(start, end, alltexts[0]);
@@ -123,8 +126,11 @@ public class WeiBoContentTextUtil {
                 ClickableImageSpan imageSpan = new ClickableImageSpan(websiteDrawable, ImageSpan.ALIGN_BOTTOM) {
                     @Override
                     public void onClick(View widget) {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                        context.startActivity(browserIntent);
+                        Intent intent = new Intent(context, WebSiteActivity.class);
+                        intent.putExtra("WEBSITE", url);
+                        context.startActivity(intent);
+//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+//                        context.startActivity(browserIntent);
                     }
 
                     public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {
