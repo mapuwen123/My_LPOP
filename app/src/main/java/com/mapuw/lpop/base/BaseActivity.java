@@ -3,6 +3,7 @@ package com.mapuw.lpop.base;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.WindowManager;
 
 import com.jude.swipbackhelper.SwipeBackHelper;
 
@@ -12,7 +13,7 @@ import com.jude.swipbackhelper.SwipeBackHelper;
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private static final String TAG = BaseActivity.class.getSimpleName();
+    protected final String TAG = this.getClass().getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,11 +21,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         SwipeBackHelper.onCreate(this);
         SwipeBackHelper.getCurrentPage(this)
                 .setSwipeEdgePercent(0.2f);
+        //透明状态栏
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         dataBindingView();
         appBarInit();
         dataInit();
         eventInit();
-
     }
 
     @Override

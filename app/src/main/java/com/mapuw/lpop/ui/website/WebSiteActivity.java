@@ -3,6 +3,7 @@ package com.mapuw.lpop.ui.website;
 import android.databinding.DataBindingUtil;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.mapuw.lpop.R;
 import com.mapuw.lpop.base.BaseActivity;
@@ -29,10 +30,12 @@ public class WebSiteActivity extends BaseActivity {
 
     @Override
     protected void appBarInit() {
-        setSupportActionBar(binding.toolbar);
+        setSupportActionBar(binding.toolbar.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("微博");
-        binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        binding.toolbar.toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
+//        binding.activityWebSite.setStatusBarBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
     }
 
     @Override
@@ -55,5 +58,15 @@ public class WebSiteActivity extends BaseActivity {
     @Override
     protected void eventInit() {
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (binding.webview.canGoBack()) {
+            binding.webview.goBack();
+            return;
+        }
+        binding.webview.destroy();
+        super.onBackPressed();
     }
 }

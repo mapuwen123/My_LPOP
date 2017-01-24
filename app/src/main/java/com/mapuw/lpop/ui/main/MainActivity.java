@@ -20,9 +20,9 @@ import com.mapuw.lpop.databinding.ActivityMainBinding;
 import com.mapuw.lpop.ui.main.adapter.MainStatusAdapter;
 import com.mapuw.lpop.ui.userhome.UserHomeActivity;
 import com.mapuw.lpop.utils.AccessTokenKeeper;
-import com.mapuw.lpop.utils.glide.GlideCircleTransform;
 import com.mapuw.lpop.utils.RecycleViewDivider;
 import com.mapuw.lpop.utils.ToastUtil;
+import com.mapuw.lpop.utils.glide.GlideCircleTransform;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.openapi.StatusesAPI;
 import com.sina.weibo.sdk.openapi.UsersAPI;
@@ -34,7 +34,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity implements MainView {
 
-    private ActivityMainBinding binding;
+    public static ActivityMainBinding binding;
 
     private ActionBarDrawerToggle mDrawerToggle;
 
@@ -61,14 +61,14 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     protected void appBarInit() {
-        setSupportActionBar(binding.appBarMain.toolbar);
+        setSupportActionBar(binding.appBarMain.toolbar.toolbar);
         mDrawerToggle = new ActionBarDrawerToggle(this,
                 binding.drawer,
-                binding.appBarMain.toolbar,
+                binding.appBarMain.toolbar.toolbar,
                 R.string.drawer_open,
                 R.string.drawer_close);
         binding.drawer.addDrawerListener(mDrawerToggle);
-        binding.appBarMain.toolbar.setNavigationOnClickListener(v -> binding.drawer.openDrawer(Gravity.LEFT));
+        binding.appBarMain.toolbar.toolbar.setNavigationOnClickListener(v -> binding.drawer.openDrawer(Gravity.LEFT));
     }
 
     @Override
