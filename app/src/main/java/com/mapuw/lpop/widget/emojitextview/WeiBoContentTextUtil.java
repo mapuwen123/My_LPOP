@@ -16,14 +16,22 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mapuw.lpop.MyApplication;
 import com.mapuw.lpop.R;
+import com.mapuw.lpop.bean.ShortUrlBean;
+import com.mapuw.lpop.network.RetrofitService;
 import com.mapuw.lpop.ui.userhome.UserHomeActivity;
 import com.mapuw.lpop.ui.website.WebSiteActivity;
+import com.mapuw.lpop.utils.AccessTokenKeeper;
 import com.mapuw.lpop.utils.DensityUtil;
 import com.mapuw.lpop.utils.LogUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by mapuw on 2016/12/20.
@@ -120,6 +128,19 @@ public class WeiBoContentTextUtil {
 //                LogUtil.d("INAGEURL", url);
                 int start = matcher.start(4);
                 int end = start + url.length();
+//                String access_token = AccessTokenKeeper.readAccessToken(context).getToken();
+//                Observable<ShortUrlBean> observable = MyApplication.retrofitService.short2LongUrl(
+//                        access_token,
+//                        url);
+//                observable.subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(
+//                                shortUrlBean -> {
+//                                    if (shortUrlBean.getUrls().get(0).getType() == 1) {
+//
+//                                    }
+//                                }
+//                        );
                 Drawable websiteDrawable = context.getResources().getDrawable(R.mipmap.button_web);
                 websiteDrawable.setBounds(0, 0, websiteDrawable.getIntrinsicWidth(), websiteDrawable.getIntrinsicHeight());
                 ClickableImageSpan imageSpan = new ClickableImageSpan(websiteDrawable, ImageSpan.ALIGN_BOTTOM) {
@@ -143,14 +164,6 @@ public class WeiBoContentTextUtil {
                     }
 
                 };
-
-//                WeiBoContentClickableSpan keyWordClickableSpan = new WeiBoContentClickableSpan(context) {
-//                    @Override
-//                    public void onClick(View widget) {
-//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                        context.startActivity(browserIntent);
-//                    }
-//                };
 
                 spannableStringBuilder.setSpan(imageSpan, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
             }

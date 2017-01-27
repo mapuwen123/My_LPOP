@@ -61,7 +61,7 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
         }
         //图片
         RecyclerView weiboIMGView = baseViewHolder.getView(R.id.weibo_image);
-        imageAdapterInit(weiboIMGView, status.pic_urls, status.bmiddle_urls);
+        imageAdapterInit(weiboIMGView, status.bmiddle_urls, status.original_urls);
         //转发 评论 点赞
         baseViewHolder.setText(R.id.redirect, status.reposts_count + "");
         baseViewHolder.setText(R.id.comment, status.comments_count + "");
@@ -78,7 +78,7 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
             baseViewHolder.setText(R.id.origin_nameAndcontent, origin_ss);
             //图片
             RecyclerView origin_IMGView = baseViewHolder.getView(R.id.origin_imageList);
-            imageAdapterInit(origin_IMGView, status.retweeted_status.pic_urls, status.retweeted_status.bmiddle_urls);
+            imageAdapterInit(origin_IMGView, status.retweeted_status.bmiddle_urls, status.retweeted_status.original_urls);
             //转发 评论 点赞
             baseViewHolder.setText(R.id.redirect, status.retweeted_status.reposts_count + "");
             baseViewHolder.setText(R.id.comment, status.retweeted_status.comments_count + "");

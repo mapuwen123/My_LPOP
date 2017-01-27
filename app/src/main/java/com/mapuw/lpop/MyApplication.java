@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.mapuw.lpop.base.BaseRetrofit;
 import com.mapuw.lpop.config.AppConfig;
+import com.mapuw.lpop.network.RetrofitService;
 import com.mapuw.lpop.utils.SDCardUtil;
 import com.tencent.smtt.sdk.QbSdk;
 
@@ -18,11 +19,13 @@ import retrofit2.Retrofit;
 public class MyApplication extends Application {
 
     public static Retrofit retrofit;
+    public static RetrofitService retrofitService;
 
     @Override
     public void onCreate() {
         super.onCreate();
         retrofit = BaseRetrofit.getRetrofit(this);
+        retrofitService = retrofit.create(RetrofitService.class);
         QbSdk.initX5Environment(this, null);
         if (SDCardUtil.isSDCardEnable()) {
             File file = new File(AppConfig.AppDir);

@@ -25,6 +25,7 @@ public class WeiBoImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> 
     Context context;
     List<String> bmiddle;
 
+    List<Integer> image_types;
     public static final int IMAGE_GIF = 0;//gif图片
     public static final int IMAGE_LONG = 1;//长图
     public static final int IMAGE_COMMON = 2;//正常图片
@@ -33,6 +34,7 @@ public class WeiBoImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> 
         super(layoutResId, data);
         this.context = context;
         this.bmiddle = bmiddle;
+        this.image_types = new ArrayList<Integer>();
     }
 
     @Override
@@ -55,20 +57,20 @@ public class WeiBoImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> 
                             gifView.setVisibility(View.VISIBLE);
                             imageType.setImageResource(R.mipmap.timeline_image_gif);
                             gifView.setImageBitmap(resource);
-                            conver.setTag(IMAGE_GIF);
+                            image_types.add(IMAGE_GIF);
                         } else if (isLongImg(resource)) {
                             longImg.setVisibility(View.VISIBLE);
                             norImg.setVisibility(View.INVISIBLE);
                             gifView.setVisibility(View.INVISIBLE);
                             imageType.setImageResource(R.mipmap.timeline_image_longimage);
                             longImg.setImageBitmap(resource);
-                            conver.setTag(IMAGE_LONG);
+                            image_types.add(IMAGE_LONG);
                         } else {
                             longImg.setVisibility(View.INVISIBLE);
                             norImg.setVisibility(View.VISIBLE);
                             gifView.setVisibility(View.INVISIBLE);
                             norImg.setImageBitmap(resource);
-                            conver.setTag(IMAGE_COMMON);
+                            image_types.add(IMAGE_COMMON);
                         }
                     }
                 });
@@ -76,8 +78,8 @@ public class WeiBoImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> 
         conver.setOnClickListener(v -> {
             Intent intent = new Intent(context, OriginalIMGActivity.class);
             intent.putStringArrayListExtra("IMG_URLS", (ArrayList<String>) this.bmiddle);
+            intent.putIntegerArrayListExtra("IMG_TYPES", (ArrayList<Integer>) this.image_types);
             intent.putExtra("POSITION", baseViewHolder.getAdapterPosition());
-            intent.putExtra("IMAGE_TYPE", (Integer) v.getTag());
             context.startActivity(intent);
         });
 

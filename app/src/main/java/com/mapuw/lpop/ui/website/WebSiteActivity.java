@@ -9,6 +9,7 @@ import com.mapuw.lpop.R;
 import com.mapuw.lpop.base.BaseActivity;
 import com.mapuw.lpop.databinding.ActivityWebSiteBinding;
 import com.mapuw.lpop.widget.webview.MyWebViewClient;
+import com.tencent.smtt.sdk.TbsVideo;
 import com.tencent.smtt.sdk.WebSettings;
 
 public class WebSiteActivity extends BaseActivity {
@@ -51,7 +52,7 @@ public class WebSiteActivity extends BaseActivity {
         settings.setGeolocationEnabled(true);
         settings.setSupportZoom(false);
         settings.setRenderPriority(WebSettings.RenderPriority.HIGH);
-        binding.webview.setWebViewClient(new MyWebViewClient());
+        binding.webview.setWebViewClient(new MyWebViewClient(binding.nsv));
         binding.webview.loadUrl(url);
     }
 
