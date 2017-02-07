@@ -3,13 +3,10 @@ package com.mapuw.lpop.ui.originalimg;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.mapuw.lpop.R;
 import com.mapuw.lpop.base.BaseActivity;
 import com.mapuw.lpop.databinding.ActivityOriginalImgBinding;
-import com.mapuw.lpop.ui.main.adapter.WeiBoImageAdapter;
 import com.mapuw.lpop.ui.originalimg.adapter.ImagePagerAdapter;
 import com.shizhefei.view.largeimage.LargeImageView;
 

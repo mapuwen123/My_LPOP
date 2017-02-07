@@ -7,7 +7,6 @@ import android.util.AttributeSet;
 import android.widget.ProgressBar;
 
 import com.mapuw.lpop.R;
-import com.tencent.smtt.sdk.WebChromeClient;
 import com.tencent.smtt.sdk.WebView;
 
 public class ProgressWebView extends WebView {
@@ -21,24 +20,7 @@ public class ProgressWebView extends WebView {
         progressbar.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 5, 0));
         progressbar.setProgressDrawable(getResources().getDrawable(R.drawable.progress_bg, null));
         addView(progressbar);
-        //        setWebViewClient(new WebViewClient(){});
-        setWebChromeClient(new myWebChromeClient());
 	}
-	
-	public class myWebChromeClient extends WebChromeClient {
-        @Override
-        public void onProgressChanged(WebView view, int newProgress) {
-            if (newProgress == 100) {
-                progressbar.setVisibility(GONE);
-            } else {
-                if (progressbar.getVisibility() == GONE)
-                    progressbar.setVisibility(VISIBLE);
-                progressbar.setProgress(newProgress);
-            }
-            super.onProgressChanged(view, newProgress);
-        }
-
-    }
 	
 	@Override
 	public void super_onScrollChanged(int l, int t, int oldl, int oldt) {
@@ -48,6 +30,14 @@ public class ProgressWebView extends WebView {
         progressbar.setLayoutParams(lp);
 		super.super_onScrollChanged(l, t, oldl, oldt);
 	}
+
+    /**
+     * 获取webview进度条
+     * @return （ProgressBar）
+     */
+    public ProgressBar getProgressbar() {
+        return this.progressbar;
+    }
 	
 //	@Override
 //	protected void onScrollChanged(int l, int t, int oldl, int oldt) {
