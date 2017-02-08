@@ -26,5 +26,9 @@
     <string name="the_day_before_yesterday">前天</string>
 
     <string name="menu_action_user_home">取消关注</string>
+    
+    <string name="web_site_refresh">刷新</string>
+    <string name="web_site_copy">复制</string>
+    <string name="web_site_cut">使用浏览器打开</string>
 
 </resources>

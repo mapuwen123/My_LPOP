@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+
+    <item
+        android:id="@+id/web_site_refresh"
+        android:title="@string/web_site_refresh"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/web_site_copy"
+        android:title="@string/web_site_copy"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/web_site_cut"
+        android:title="@string/web_site_cut"
+        app:showAsAction="never" />
+
+</menu>

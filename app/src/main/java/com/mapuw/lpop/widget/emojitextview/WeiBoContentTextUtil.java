@@ -42,7 +42,7 @@ public class WeiBoContentTextUtil {
     private static final String TOPIC = "#[\\p{Print}\\p{InCJKUnifiedIdeographs}&&[^#]]+#";// ##话题
     private static final String ALLTEXT = "[全][文][\\s\\S]*[a-zA-z]+://[m][^\\s]*";//全文
     //    private static final String URL = "http://[a-zA-Z0-9+&@#/%?=~_\\-|!:,\\.;]*[a-zA-Z0-9+&@#/%=~_|]";// url
-    private static final String URL = "[a-zA-z]+://[t][^\\s]*";// url
+    private static final String URL = "[a-zA-z]+://[t][^\\s][//a-zA-z0-9$]+";// url
     private static final String EMOJI = "\\[(\\S+?)\\]";//emoji 表情
 
     private static final String ALL = "(" + AT + ")" + "|" +
@@ -149,8 +149,6 @@ public class WeiBoContentTextUtil {
                         Intent intent = new Intent(context, WebSiteActivity.class);
                         intent.putExtra("WEBSITE", url);
                         context.startActivity(intent);
-//                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-//                        context.startActivity(browserIntent);
                     }
 
                     public void draw(Canvas canvas, CharSequence text, int start, int end, float x, int top, int y, int bottom, Paint paint) {

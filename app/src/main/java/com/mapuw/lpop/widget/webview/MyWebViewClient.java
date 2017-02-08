@@ -19,13 +19,4 @@ public class MyWebViewClient extends WebViewClient {
     public void onLoadResource(WebView webView, String s) {
         super.onLoadResource(webView, s);
     }
-
-    //    @Override
-//    public void onPageFinished(WebView webView, String s) {
-//        int height = webView.getHeight();
-//        android.support.v4.widget.NestedScrollView.LayoutParams params = (NestedScrollView.LayoutParams) this.nsv.getLayoutParams();
-//        params.height = height;
-//        this.nsv.setLayoutParams(params);
-//        super.onPageFinished(webView, s);
-//    }
 }
