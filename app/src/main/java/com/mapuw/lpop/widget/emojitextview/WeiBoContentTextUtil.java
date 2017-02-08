@@ -42,7 +42,7 @@ public class WeiBoContentTextUtil {
     private static final String TOPIC = "#[\\p{Print}\\p{InCJKUnifiedIdeographs}&&[^#]]+#";// ##话题
     private static final String ALLTEXT = "[全][文][\\s\\S]*[a-zA-z]+://[m][^\\s]*";//全文
     //    private static final String URL = "http://[a-zA-Z0-9+&@#/%?=~_\\-|!:,\\.;]*[a-zA-Z0-9+&@#/%=~_|]";// url
-    private static final String URL = "[a-zA-z]+://[t][^\\s][//a-zA-z0-9$]+";// url
+    private static final String URL = "[http|https]+://[t][^\\s][//a-zA-z0-9$]+";// url
     private static final String EMOJI = "\\[(\\S+?)\\]";//emoji 表情
 
     private static final String ALL = "(" + AT + ")" + "|" +
@@ -83,11 +83,11 @@ public class WeiBoContentTextUtil {
                 WeiBoContentClickableSpan myClickableSpan = new WeiBoContentClickableSpan(context) {
                     @Override
                     public void onClick(View widget) {
-                        Intent intent = new Intent(context, UserHomeActivity.class);
-                        String screen_name = at.substring(1);
-                        intent.putExtra("screenName", screen_name);
-                        context.startActivity(intent);
-                        //Toast.makeText(context, "点击了用户：" + at, Toast.LENGTH_SHORT).show();
+//                        Intent intent = new Intent(context, UserHomeActivity.class);
+//                        String screen_name = at.substring(1);
+//                        intent.putExtra("screenName", screen_name);
+//                        context.startActivity(intent);
+                        Toast.makeText(context, "点击了用户：" + at, Toast.LENGTH_SHORT).show();
                     }
                 };
                 spannableStringBuilder.setSpan(myClickableSpan, start, end, Spannable.SPAN_INCLUSIVE_INCLUSIVE);
