@@ -17,6 +17,17 @@
 
     </android.support.v4.view.ViewPager>
 
+    <TextView
+        android:id="@+id/page_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1/9"
+        android:textSize="@dimen/text_huge_size"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:textColor="@color/colorWhile"/>
+
 </RelativeLayout>
 
 </layout>

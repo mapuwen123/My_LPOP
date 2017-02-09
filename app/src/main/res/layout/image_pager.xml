@@ -6,18 +6,18 @@
     android:background="@android:color/transparent"
     android:orientation="vertical">
 
-    <com.shizhefei.view.largeimage.LargeImageView
-        android:id="@+id/imageView"
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+        android:id="@+id/longImg"
         android:scrollbars="vertical|horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageView
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/norImg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:id="@+id/gifView"
@@ -25,7 +25,20 @@
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:layout_centerInParent="true"
-        android:scaleType="centerCrop" />
+        android:scaleType="fitCenter" />
+
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/progressBar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <!--<ProgressBar-->
+            <!--style="@android:style/Widget.Material.Light.ProgressBar.Large"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true" />-->
+
+    <!--</RelativeLayout>-->
 
 </FrameLayout>
 

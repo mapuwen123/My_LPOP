@@ -71,10 +71,19 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
         if (status.retweeted_status != null) {
             baseViewHolder.getView(R.id.retweetStatus_layout).setVisibility(View.VISIBLE);
             //文字
-            SpannableStringBuilder origin_ss = WeiBoContentTextUtil.getWeiBoContent(
-                    "@" + status.retweeted_status.user.screen_name + ":" + status.retweeted_status.text,
-                    context,
-                    baseViewHolder.getView(R.id.origin_nameAndcontent));
+            SpannableStringBuilder origin_ss;
+            //转发原文被删除的情况下做判空处理
+            if (status.retweeted_status.user != null) {
+                origin_ss = WeiBoContentTextUtil.getWeiBoContent(
+                        "@" + status.retweeted_status.user.screen_name + ":" + status.retweeted_status.text,
+                        context,
+                        baseViewHolder.getView(R.id.origin_nameAndcontent));
+            } else {
+                origin_ss = WeiBoContentTextUtil.getWeiBoContent(
+                        status.retweeted_status.text,
+                        context,
+                        baseViewHolder.getView(R.id.origin_nameAndcontent));
+            }
             baseViewHolder.setText(R.id.origin_nameAndcontent, origin_ss);
             //图片
             RecyclerView origin_IMGView = baseViewHolder.getView(R.id.origin_imageList);
