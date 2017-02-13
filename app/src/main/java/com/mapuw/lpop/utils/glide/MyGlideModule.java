@@ -6,8 +6,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.GlideBuilder;
 import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.load.engine.cache.DiskLruCacheFactory;
+import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.module.GlideModule;
 import com.mapuw.lpop.config.AppConfig;
+import com.mapuw.lpop.utils.glide.integration.okhttp.OkHttpUrlLoader;
+
+import java.io.InputStream;
 
 import static com.bumptech.glide.load.engine.cache.DiskCache.Factory.DEFAULT_DISK_CACHE_SIZE;
 
@@ -24,6 +28,6 @@ public class MyGlideModule implements GlideModule {
 
     @Override
     public void registerComponents(Context context, Glide glide) {
-
+        glide.register(GlideUrl.class, InputStream.class, new OkHttpUrlLoader.Factory());
     }
 }

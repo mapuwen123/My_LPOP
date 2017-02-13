@@ -33,6 +33,8 @@ import com.sina.weibo.sdk.openapi.models.User;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.sina.weibo.sdk.openapi.legacy.CommonAPI.CAPITAL.s;
+
 public class MainActivity extends BaseActivity implements MainView {
 
     public static ActivityMainBinding binding;
@@ -95,10 +97,16 @@ public class MainActivity extends BaseActivity implements MainView {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 //判断RecyclerView滑动状态，滑动停止时加载图片
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                    Glide.with(MainActivity.this).resumeRequests();
-                } else {
-                    Glide.with(MainActivity.this).pauseRequests();
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        Glide.with(MainActivity.this).resumeRequests();
+                        break;
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        Glide.with(MainActivity.this).resumeRequests();
+                        break;
+                    case RecyclerView.SCROLL_STATE_SETTLING:
+                        Glide.with(MainActivity.this).pauseRequests();
+                        break;
                 }
             }
         });

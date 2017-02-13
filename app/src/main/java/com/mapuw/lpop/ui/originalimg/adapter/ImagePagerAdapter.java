@@ -53,6 +53,7 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
 //        super.destroyItem(container, position, object);
+
         container.removeView((View) object);
     }
 
@@ -126,7 +127,6 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
         Glide.with(context)
                 .load(url)
                 .asBitmap()
-                .error(R.mipmap.button_web)
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {

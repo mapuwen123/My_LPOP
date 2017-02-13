@@ -85,6 +85,13 @@ public class WeiBoImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> 
 
     }
 
+    public void setIMG(ImageView imageView, String url) {
+        Glide.with(context)
+                .load(url)
+                .crossFade()
+                .into(imageView);
+    }
+
     public boolean isLongImg(Bitmap bitmap) {
         if (bitmap.getHeight() > bitmap.getWidth() * 3) {
             return true;

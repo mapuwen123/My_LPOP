@@ -1,6 +1,7 @@
 package com.mapuw.lpop.ui.main.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,9 +11,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.mapuw.lpop.R;
+import com.mapuw.lpop.utils.LogUtil;
 import com.mapuw.lpop.utils.TimeUtils;
 import com.mapuw.lpop.utils.glide.GlideCircleTransform;
 import com.mapuw.lpop.widget.emojitextview.WeiBoContentTextUtil;
@@ -47,6 +52,7 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
         Glide.with(context)
                 .load(status.user.profile_image_url)
                 .transform(new GlideCircleTransform(context))
+                .priority(Priority.HIGH)
                 .into((ImageView) baseViewHolder.getView(R.id.profile_img));
         //昵称
         baseViewHolder.setText(R.id.profile_name, status.user.screen_name);
