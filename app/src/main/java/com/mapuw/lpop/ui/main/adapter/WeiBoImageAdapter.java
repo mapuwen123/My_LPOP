@@ -1,5 +1,6 @@
 package com.mapuw.lpop.ui.main.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -93,7 +94,7 @@ public class WeiBoImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> 
     }
 
     public boolean isLongImg(Bitmap bitmap) {
-        if (bitmap.getHeight() > bitmap.getWidth() * 3) {
+        if (bitmap.getHeight() > bitmap.getWidth() * 2.5) {
             return true;
         }
         return false;

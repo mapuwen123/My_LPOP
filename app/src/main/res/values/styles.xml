@@ -18,7 +18,7 @@
         <!--<item name="android:windowAnimationStyle">@style/SlideRightAnimation</item>-->
     <!--</style>-->
 
-    <style name="AppBaseTheme" parent="Theme.AppCompat">
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
         <!-- Customize your theme here. -->
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
@@ -29,6 +29,11 @@
 
     <style name="MainTheme" parent="AppTheme">
         <item name="android:windowIsTranslucent">false</item>//关掉这个Activity的透明背景
+    </style>
+
+    <style name="FullScreenTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:windowFullscreen">true</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

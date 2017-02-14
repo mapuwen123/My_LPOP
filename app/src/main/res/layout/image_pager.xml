@@ -3,8 +3,7 @@
     android:id="@+id/img_group"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
-    android:orientation="vertical">
+    android:background="@color/rl_textcolor" >
 
     <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
         android:id="@+id/longImg"
@@ -27,18 +26,19 @@
         android:layout_centerInParent="true"
         android:scaleType="fitCenter" />
 
-    <!--<RelativeLayout-->
-        <!--android:id="@+id/progressBar"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+    <RelativeLayout
+        android:id="@+id/progress_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
 
-        <!--<ProgressBar-->
-            <!--style="@android:style/Widget.Material.Light.ProgressBar.Large"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_centerInParent="true" />-->
+        <ProgressBar
+            style="@android:style/Widget.Material.Light.ProgressBar.Large"
+            android:id="@+id/progressbar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true" />
 
-    <!--</RelativeLayout>-->
+    </RelativeLayout>
 
 </FrameLayout>
 

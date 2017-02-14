@@ -43,7 +43,7 @@ public class WebSiteActivity extends BaseActivity implements WebSiteView, Toolba
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("微博");
-        binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        binding.toolbar.setNavigationOnClickListener(v -> finish());
         binding.toolbar.setOnMenuItemClickListener(this);
     }
 

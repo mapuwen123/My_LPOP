@@ -5,6 +5,8 @@
     <color name="colorAccent">#4d719d</color>
     <color name="windowBackground">#DCDCDC</color>
 
+    <color name="translucent_background">#60000000</color>
+
     <color name="colorWhile">#ffffff</color>
     <color name="black_p50">#B0000000</color>
     
