@@ -17,6 +17,7 @@ import com.mapuw.lpop.ui.originalimg.OriginalIMGActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by mapuw on 2016/12/28.
@@ -34,7 +35,7 @@ public class WeiBoImageAdapter extends BaseQuickAdapter<String, BaseViewHolder> 
     public WeiBoImageAdapter(Context context, int layoutResId, List<String> data, List<String> bmiddle) {
         super(layoutResId, data);
         this.context = context;
-        this.bmiddle = bmiddle;
+        this.bmiddle = data;
         this.image_types = new ArrayList<Integer>();
     }
 

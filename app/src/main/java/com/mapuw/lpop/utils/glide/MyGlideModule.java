@@ -23,7 +23,7 @@ public class MyGlideModule implements GlideModule {
     @Override
     public void applyOptions(Context context, GlideBuilder builder) {
         builder.setDiskCache(new DiskLruCacheFactory(AppConfig.AppDir + "/IMGCache", DEFAULT_DISK_CACHE_SIZE));
-        builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);
+//        builder.setDecodeFormat(DecodeFormat.PREFER_ARGB_8888);
     }
 
     @Override

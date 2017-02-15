@@ -1,16 +1,16 @@
 package com.mapuw.lpop.ui.originalimg.adapter;
 
 import android.app.Activity;
-import android.app.Dialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.PointF;
-import android.os.Handler;
-import android.os.Message;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -19,28 +19,23 @@ import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.gif.GifDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.davemorrissey.labs.subscaleview.ImageSource;
-import com.davemorrissey.labs.subscaleview.ImageViewState;
-import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
-import com.mapuw.lpop.R;
+import com.mapuw.lpop.config.AppConfig;
 import com.mapuw.lpop.ui.main.adapter.WeiBoImageAdapter;
-import com.mapuw.lpop.utils.LogUtil;
-import com.mapuw.lpop.utils.ScreenUtil;
+import com.mapuw.lpop.utils.SaveImgUtil;
 import com.mapuw.lpop.utils.ToastUtil;
-import com.mapuw.lpop.utils.glide.integration.okhttp.ProgressModelLoader;
+import com.shizhefei.view.largeimage.LargeImageView;
 
 import java.io.File;
 import java.util.List;
-
-import static com.mapuw.lpop.R.id.longImg;
 
 /**
  * Created by mapuw on 2017/1/9.
  */
 
-public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListener, View.OnLongClickListener {
+public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListener {
     private Context context;
     private List<String> data;
     private List<Integer> types;
@@ -70,40 +65,33 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
 
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
-        View view = LayoutInflater.from(container.getContext()).inflate(R.layout.image_pager, null);
-        final SubsamplingScaleImageView longIMG = (SubsamplingScaleImageView) view.findViewById(longImg);
-        final SubsamplingScaleImageView norIMG = (SubsamplingScaleImageView) view.findViewById(R.id.norImg);
-        final ImageView gifIMG = (ImageView) view.findViewById(R.id.gifView);
-        RelativeLayout progress_layout = (RelativeLayout) view.findViewById(R.id.progress_layout);
-        ProgressBar progressbar = (ProgressBar) view.findViewById(R.id.progressbar);
-
-        longIMG.setOnClickListener(this);
-        norIMG.setOnClickListener(this);
-        gifIMG.setOnClickListener(this);
-        longIMG.setOnLongClickListener(this);
-        norIMG.setOnLongClickListener(this);
-        gifIMG.setOnLongClickListener(this);
+        RelativeLayout view = new RelativeLayout(context);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT
+        , ViewGroup.LayoutParams.MATCH_PARENT);
+        params.addRule(RelativeLayout.CENTER_IN_PARENT);
+        ProgressBar progressBar = new ProgressBar(context);
 
         switch (types.get(position)) {
             case WeiBoImageAdapter.IMAGE_GIF:
-                longIMG.setVisibility(View.GONE);
-                norIMG.setVisibility(View.GONE);
-                gifIMG.setVisibility(View.VISIBLE);
-                setGifIMG(gifIMG, data.get(position), progress_layout, progressbar);
+                ImageView gifIMG = new ImageView(context);
+                gifIMG.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                view.addView(gifIMG, params);
+                setGifIMG(gifIMG, data.get(position), progressBar);
                 break;
             case WeiBoImageAdapter.IMAGE_LONG:
-                longIMG.setVisibility(View.VISIBLE);
-                norIMG.setVisibility(View.GONE);
-                gifIMG.setVisibility(View.GONE);
-                setLongIMG(longIMG, data.get(position), progress_layout, progressbar);
+                LargeImageView longIMG = new LargeImageView(context);
+                view.addView(longIMG, params);
+                setLongIMG(longIMG, data.get(position), progressBar);
                 break;
             case WeiBoImageAdapter.IMAGE_COMMON:
-                longIMG.setVisibility(View.GONE);
-                norIMG.setVisibility(View.VISIBLE);
-                gifIMG.setVisibility(View.GONE);
-                setNorIMG(norIMG, data.get(position), progress_layout, progressbar);
+                LargeImageView norIMG = new LargeImageView(context);
+                view.addView(norIMG, params);
+                setNorIMG(norIMG, data.get(position), progressBar);
                 break;
         }
+
+        view.addView(progressBar, params);
 
         container.addView(view);
         return view;
@@ -115,20 +103,18 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
      * @param imageView
      * @param url
      */
-    private void setLongIMG(SubsamplingScaleImageView imageView, String url, RelativeLayout progress_layout, ProgressBar progressbar) {
-        imageView.setQuickScaleEnabled(true);
-        imageView.setZoomEnabled(true);
-        imageView.setPanEnabled(true);
-        imageView.setDoubleTapZoomDuration(100);
-        imageView.setMinimumScaleType(SubsamplingScaleImageView.SCALE_TYPE_CENTER_CROP);
-        imageView.setDoubleTapZoomDpi(SubsamplingScaleImageView.ZOOM_FOCUS_CENTER);
+    private void setLongIMG(LargeImageView imageView, String url, ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        imageView.setOnClickListener(this);
         Glide.with(context)
                 .load(url)
-                .downloadOnly(new SimpleTarget<File>() {
+                .asBitmap()
+                .into(new SimpleTarget<Bitmap>() {
                     @Override
-                    public void onResourceReady(File resource, GlideAnimation<? super File> glideAnimation) {
-                        imageView.setImage(ImageSource.uri(resource.getAbsolutePath()), new ImageViewState(0, new PointF(0, 0), 0));
-                        progress_layout.setVisibility(View.GONE);
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        imageView.setOnLongClickListener(new ImgOnLongClickListener(resource, null, url));
+                        imageView.setImage(resource);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
     }
@@ -139,15 +125,18 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
      * @param imageView
      * @param url
      */
-    private void setNorIMG(SubsamplingScaleImageView imageView, String url, RelativeLayout progress_layout, ProgressBar progressbar) {
+    private void setNorIMG(LargeImageView imageView, String url, ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        imageView.setOnClickListener(this);
         Glide.with(context)
                 .load(url)
                 .asBitmap()
                 .into(new SimpleTarget<Bitmap>() {
                     @Override
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        progress_layout.setVisibility(View.GONE);
-                        imageView.setImage(ImageSource.bitmap(resource), new ImageViewState(0, new PointF(0, 0), 0));
+                        imageView.setOnLongClickListener(new ImgOnLongClickListener(resource, null, url));
+                        imageView.setImage(resource);
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
     }
@@ -158,12 +147,22 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
      * @param imageView
      * @param url
      */
-    private void setGifIMG(ImageView imageView, String url, RelativeLayout progress_layout, ProgressBar progressbar) {
+    private void setGifIMG(ImageView imageView, String url, ProgressBar progressBar) {
+        progressBar.setVisibility(View.VISIBLE);
+        imageView.setOnClickListener(this);
         Glide.with(context)
                 .load(url)
                 .asGif()
                 .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(imageView);
+                .into(new SimpleTarget<GifDrawable>() {
+                    @Override
+                    public void onResourceReady(GifDrawable resource, GlideAnimation<? super GifDrawable> glideAnimation) {
+                        imageView.setOnLongClickListener(new ImgOnLongClickListener(null, resource, url));
+                        imageView.setImageDrawable(resource);
+                        ((GifDrawable) imageView.getDrawable()).start();
+                        progressBar.setVisibility(View.GONE);
+                    }
+                });
     }
 
     @Override
@@ -171,28 +170,59 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
         ((Activity) context).finish();
     }
 
-    @Override
-    public boolean onLongClick(View v) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        String items[] = {"保存图片", "分享图片", "复制图片链接"};
-        builder.setItems(items, new Dialog.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+    public class ImgOnLongClickListener implements View.OnLongClickListener {
+        private Bitmap bitmap;
+        private GifDrawable gif;
+        private String url;
+
+        public ImgOnLongClickListener(Bitmap bitmap, GifDrawable gif, String url) {
+            this.bitmap = bitmap;
+            this.gif = gif;
+            this.url = url;
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            String items[] = {"保存图片", "分享图片", "复制图片链接"};
+            builder.setItems(items, (dialog, which) -> {
                 switch (which) {
                     case 0:
-                        ToastUtil.showShort(context, items[which]);
+                        File file = null;
+                        if (bitmap != null) {
+                            file = SaveImgUtil.create(context)
+                                    .saveImage(new File(AppConfig.AppDir, "Picture"), bitmap, url.split("/")[url.split("/").length - 1]);
+                        } else {
+                            file = SaveImgUtil.create(context)
+                                    .saveImage(new File(AppConfig.AppDir, "Picture"), BitmapFactory.decodeByteArray(gif.getData(), 0, gif.getData().length), url.split("/")[url.split("/").length - 1]);
+                        }
+                        ToastUtil.showLong(context, "图片已保存至" + file.getAbsolutePath());
                         break;
                     case 1:
-                        ToastUtil.showShort(context, items[which]);
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_SEND);
+                        intent.setType("image/*");
+                        Uri uri = null;
+                        if (bitmap != null) {
+                            Uri.fromFile(SaveImgUtil.create(context)
+                                    .saveImage(new File(AppConfig.AppDir, "Picture"), bitmap, url.split("/")[url.split("/").length - 1]));
+                        } else {
+                            Uri.fromFile(SaveImgUtil.create(context)
+                                    .saveImage(new File(AppConfig.AppDir, "Picture"), gif.getFirstFrame(), url.split("/")[url.split("/").length - 1]));
+                        }
+                        intent.putExtra(Intent.EXTRA_STREAM, uri);
+                        context.startActivity(Intent.createChooser(intent, "分享到"));
                         break;
                     case 2:
-                        ToastUtil.showShort(context, items[which]);
+                        ClipboardManager cm = (ClipboardManager) context.getSystemService(context.CLIPBOARD_SERVICE);
+                        ClipData cd = ClipData.newPlainText("URL", url);
+                        cm.setPrimaryClip(cd);
                         break;
                 }
-            }
-        });
-        builder.create().show();
-        return false;
+            });
+            builder.create().show();
+            return false;
+        }
     }
 
 //    public class ProgressHandler extends Handler {

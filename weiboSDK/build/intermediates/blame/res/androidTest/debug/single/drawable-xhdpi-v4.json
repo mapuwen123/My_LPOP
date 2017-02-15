@@ -8,12 +8,12 @@
         "source": "C:\\Users\\mapuw\\AndroidStudioProjects\\LPOP\\weiboSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ic_com_sina_weibo_sdk_button_blue_normal.9.png"
     },
     {
-        "merged": "C:\\Users\\mapuw\\AndroidStudioProjects\\LPOP\\weiboSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\ic_com_sina_weibo_sdk_button_blue_focused.9.png",
-        "source": "C:\\Users\\mapuw\\AndroidStudioProjects\\LPOP\\weiboSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ic_com_sina_weibo_sdk_button_blue_focused.9.png"
-    },
-    {
         "merged": "C:\\Users\\mapuw\\AndroidStudioProjects\\LPOP\\weiboSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\ic_com_sina_weibo_sdk_login_with_account_text_normal.png",
         "source": "C:\\Users\\mapuw\\AndroidStudioProjects\\LPOP\\weiboSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ic_com_sina_weibo_sdk_login_with_account_text_normal.png"
+    },
+    {
+        "merged": "C:\\Users\\mapuw\\AndroidStudioProjects\\LPOP\\weiboSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\ic_com_sina_weibo_sdk_button_blue_focused.9.png",
+        "source": "C:\\Users\\mapuw\\AndroidStudioProjects\\LPOP\\weiboSDK\\build\\intermediates\\bundles\\debug\\res\\drawable-xhdpi-v4\\ic_com_sina_weibo_sdk_button_blue_focused.9.png"
     },
     {
         "merged": "C:\\Users\\mapuw\\AndroidStudioProjects\\LPOP\\weiboSDK\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-xhdpi-v4\\ic_com_sina_weibo_sdk_login_with_account_text_focused.png",

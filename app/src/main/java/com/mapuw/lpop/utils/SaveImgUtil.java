@@ -118,14 +118,14 @@ public class SaveImgUtil {
     /**
      * @param bitmap 保存Bitmap
      */
-    public void saveImage(File imgFile, Bitmap bitmap) {
+    public File saveImage(File imgFile, Bitmap bitmap, String ImgName) {
         // 首先保存图片
-        File appDir = new File(Environment.getExternalStorageDirectory(), "weiSwiftImg");
-        if (!appDir.exists()) {
-            appDir.mkdir();
+//        File appDir = new File(Environment.getExternalStorageDirectory(), "weiSwiftImg");
+        if (!imgFile.exists()) {
+            imgFile.mkdir();
         }
-        String fileName = System.currentTimeMillis() + ".jpg";
-        File file = new File(appDir, fileName);
+        String fileName = ImgName;
+        File file = new File(imgFile, fileName);
         try {
             file.createNewFile();
             FileOutputStream fos = new FileOutputStream(file);
@@ -136,15 +136,16 @@ public class SaveImgUtil {
             e.printStackTrace();
         }
 
-        // 其次把文件插入到系统图库
-        try {
-            MediaStore.Images.Media.insertImage(mContext.getContentResolver(), file.getAbsolutePath(), fileName, null);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        // 最后通知图库更新
-        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + appDir)));
-        Toast.makeText(mContext, "保存成功！", Toast.LENGTH_SHORT).show();
+//        // 其次把文件插入到系统图库
+//        try {
+//            MediaStore.Images.Media.insertImage(mContext.getContentResolver(), file.getAbsolutePath(), fileName, null);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        // 最后通知图库更新
+//        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + imgFile)));
+//        Toast.makeText(mContext, "保存成功！", Toast.LENGTH_SHORT).show();
+        return file;
     }
 
 

@@ -5,13 +5,13 @@
     android:layout_height="match_parent"
     android:background="@color/rl_textcolor" >
 
-    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+    <com.shizhefei.view.largeimage.LargeImageView
         android:id="@+id/longImg"
         android:scrollbars="vertical|horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+    <com.shizhefei.view.largeimage.LargeImageView
         android:id="@+id/norImg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -34,8 +34,8 @@
         <ProgressBar
             style="@android:style/Widget.Material.Light.ProgressBar.Large"
             android:id="@+id/progressbar"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_centerInParent="true" />
 
     </RelativeLayout>

@@ -21,7 +21,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         SwipeBackHelper.onCreate(this);
         SwipeBackHelper.getCurrentPage(this)
                 .setSwipeEdgePercent(0.2f);
-        if (TAG.equalsIgnoreCase("LoginActivity") || TAG.equalsIgnoreCase("MainActivity")) {
+        if (TAG.equalsIgnoreCase("LoginActivity")
+                || TAG.equalsIgnoreCase("MainActivity")
+                || TAG.equalsIgnoreCase("OriginalIMGActivity")) {
             //透明状态栏
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         } else {

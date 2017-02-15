@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.jude.swipbackhelper.SwipeBackHelper;
 import com.mapuw.lpop.R;
 import com.mapuw.lpop.base.BaseActivity;
 import com.mapuw.lpop.databinding.ActivityOriginalImgBinding;

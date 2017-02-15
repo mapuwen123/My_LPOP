@@ -38,8 +38,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity android:name=".ui.userhome.UserHomeActivity" />
-        <activity android:name=".ui.originalimg.OriginalIMGActivity"
-            android:theme="@style/FullScreenTheme" />
+        <activity android:name=".ui.originalimg.OriginalIMGActivity" />
         <activity
             android:name=".ui.website.WebSiteActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
