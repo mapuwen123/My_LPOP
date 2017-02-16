@@ -11,8 +11,10 @@ import android.provider.MediaStore;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 
 /**
  * 与保存相关的工具类
@@ -136,7 +138,7 @@ public class SaveImgUtil {
             e.printStackTrace();
         }
 
-//        // 其次把文件插入到系统图库
+        // 其次把文件插入到系统图库
 //        try {
 //            MediaStore.Images.Media.insertImage(mContext.getContentResolver(), file.getAbsolutePath(), fileName, null);
 //        } catch (FileNotFoundException e) {
@@ -145,6 +147,35 @@ public class SaveImgUtil {
 //        // 最后通知图库更新
 //        mContext.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + imgFile)));
 //        Toast.makeText(mContext, "保存成功！", Toast.LENGTH_SHORT).show();
+        return file;
+    }
+
+    public File saveGif(File imgFile, File gif, String ImgName) {
+        if (!imgFile.exists()) {
+            imgFile.mkdir();
+        }
+        String fileName = ImgName;
+        File file = new File(imgFile, fileName);
+        try {
+            int bytesum = 0;
+            int byteread = 0;
+            file.createNewFile();
+            if (gif.exists()) {
+                InputStream inStream = new FileInputStream(gif); //读入原文件
+                FileOutputStream fs = new FileOutputStream(file);
+                byte[] buffer = new byte[1444];
+                int length;
+                while ( (byteread = inStream.read(buffer)) != -1) {
+                    bytesum += byteread; //字节数 文件大小
+                    System.out.println(bytesum);
+                    fs.write(buffer, 0, byteread);
+                }
+                inStream.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return file;
     }
 

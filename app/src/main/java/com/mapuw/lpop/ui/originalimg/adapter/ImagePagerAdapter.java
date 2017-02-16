@@ -24,9 +24,11 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.mapuw.lpop.config.AppConfig;
 import com.mapuw.lpop.ui.main.adapter.WeiBoImageAdapter;
+import com.mapuw.lpop.utils.LogUtil;
 import com.mapuw.lpop.utils.SaveImgUtil;
 import com.mapuw.lpop.utils.ToastUtil;
 import com.shizhefei.view.largeimage.LargeImageView;
+import com.shizhefei.view.largeimage.factory.FileBitmapDecoderFactory;
 
 import java.io.File;
 import java.util.List;
@@ -68,7 +70,7 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
         RelativeLayout view = new RelativeLayout(context);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT
-        , ViewGroup.LayoutParams.MATCH_PARENT);
+                , ViewGroup.LayoutParams.MATCH_PARENT);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         ProgressBar progressBar = new ProgressBar(context);
 
@@ -91,7 +93,11 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
                 break;
         }
 
-        view.addView(progressBar, params);
+        RelativeLayout.LayoutParams params_2 = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT
+                , ViewGroup.LayoutParams.WRAP_CONTENT);
+        params_2.addRule(RelativeLayout.CENTER_IN_PARENT);
+        view.addView(progressBar, params_2);
 
         container.addView(view);
         return view;
@@ -152,17 +158,28 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
         imageView.setOnClickListener(this);
         Glide.with(context)
                 .load(url)
-                .asGif()
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .into(new SimpleTarget<GifDrawable>() {
+                .downloadOnly(new SimpleTarget<File>() {
                     @Override
-                    public void onResourceReady(GifDrawable resource, GlideAnimation<? super GifDrawable> glideAnimation) {
-                        imageView.setOnLongClickListener(new ImgOnLongClickListener(null, resource, url));
-                        imageView.setImageDrawable(resource);
-                        ((GifDrawable) imageView.getDrawable()).start();
-                        progressBar.setVisibility(View.GONE);
+                    public void onResourceReady(File resource, GlideAnimation<? super File> glideAnimation) {
+                        File file = SaveImgUtil.create(context)
+                                .saveGif(new File(AppConfig.AppDir, "Picture"), resource, url.split("/")[url.split("/").length - 1]);
+                        LogUtil.d("PROGRESS", file.getAbsolutePath());
+                        Glide.with(context)
+                                .load(file.getAbsoluteFile())
+                                .asGif()
+                                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                                .into(new SimpleTarget<GifDrawable>() {
+                                    @Override
+                                    public void onResourceReady(GifDrawable resource, GlideAnimation<? super GifDrawable> glideAnimation) {
+                                        imageView.setOnLongClickListener(new ImgOnLongClickListener(null, file, url));
+                                        imageView.setImageDrawable(resource);
+                                        ((GifDrawable) imageView.getDrawable()).start();
+                                        progressBar.setVisibility(View.GONE);
+                                    }
+                                });
                     }
                 });
+
     }
 
     @Override
@@ -172,10 +189,10 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
 
     public class ImgOnLongClickListener implements View.OnLongClickListener {
         private Bitmap bitmap;
-        private GifDrawable gif;
+        private File gif;
         private String url;
 
-        public ImgOnLongClickListener(Bitmap bitmap, GifDrawable gif, String url) {
+        public ImgOnLongClickListener(Bitmap bitmap, File gif, String url) {
             this.bitmap = bitmap;
             this.gif = gif;
             this.url = url;
@@ -193,8 +210,7 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
                             file = SaveImgUtil.create(context)
                                     .saveImage(new File(AppConfig.AppDir, "Picture"), bitmap, url.split("/")[url.split("/").length - 1]);
                         } else {
-                            file = SaveImgUtil.create(context)
-                                    .saveImage(new File(AppConfig.AppDir, "Picture"), BitmapFactory.decodeByteArray(gif.getData(), 0, gif.getData().length), url.split("/")[url.split("/").length - 1]);
+                            file = gif;
                         }
                         ToastUtil.showLong(context, "图片已保存至" + file.getAbsolutePath());
                         break;
@@ -204,11 +220,10 @@ public class ImagePagerAdapter extends PagerAdapter implements View.OnClickListe
                         intent.setType("image/*");
                         Uri uri = null;
                         if (bitmap != null) {
-                            Uri.fromFile(SaveImgUtil.create(context)
+                            uri = Uri.fromFile(SaveImgUtil.create(context)
                                     .saveImage(new File(AppConfig.AppDir, "Picture"), bitmap, url.split("/")[url.split("/").length - 1]));
                         } else {
-                            Uri.fromFile(SaveImgUtil.create(context)
-                                    .saveImage(new File(AppConfig.AppDir, "Picture"), gif.getFirstFrame(), url.split("/")[url.split("/").length - 1]));
+                            uri = Uri.fromFile(gif);
                         }
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
                         context.startActivity(Intent.createChooser(intent, "分享到"));
