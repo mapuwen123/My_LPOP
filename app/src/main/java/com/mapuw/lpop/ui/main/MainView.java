@@ -1,6 +1,6 @@
 package com.mapuw.lpop.ui.main;
 
-import com.sina.weibo.sdk.openapi.models.Status;
+import com.mapuw.lpop.bean.Status;
 import com.sina.weibo.sdk.openapi.models.User;
 
 import java.util.List;

@@ -1,12 +1,13 @@
 package com.mapuw.lpop.bean;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by mapuw on 2017/1/26.
  */
 
-public class ShortUrlBean {
+public class ShortUrlBean implements Serializable {
 
     private List<UrlsBean> urls;
 

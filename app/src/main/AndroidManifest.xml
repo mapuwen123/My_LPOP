@@ -43,6 +43,7 @@
             android:name=".ui.website.WebSiteActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+        <activity android:name=".ui.comments.CommentsActivity"></activity>
     </application>
 
 </manifest>

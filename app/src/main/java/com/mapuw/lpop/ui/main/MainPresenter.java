@@ -2,13 +2,12 @@ package com.mapuw.lpop.ui.main;
 
 import android.text.TextUtils;
 
-import com.mapuw.lpop.utils.LogUtil;
+import com.mapuw.lpop.bean.StatusList;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.StatusesAPI;
 import com.sina.weibo.sdk.openapi.UsersAPI;
-import com.sina.weibo.sdk.openapi.models.StatusList;
 import com.sina.weibo.sdk.openapi.models.User;
 
 import org.json.JSONException;

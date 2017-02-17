@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.jude.swipbackhelper.SwipeBackHelper;
 import com.mapuw.lpop.R;
 import com.mapuw.lpop.base.BaseActivity;
+import com.mapuw.lpop.bean.Status;
 import com.mapuw.lpop.config.Constants;
 import com.mapuw.lpop.databinding.ActivityMainBinding;
 import com.mapuw.lpop.ui.main.adapter.MainStatusAdapter;
@@ -27,13 +28,10 @@ import com.mapuw.lpop.utils.glide.GlideCircleTransform;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.openapi.StatusesAPI;
 import com.sina.weibo.sdk.openapi.UsersAPI;
-import com.sina.weibo.sdk.openapi.models.Status;
 import com.sina.weibo.sdk.openapi.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.sina.weibo.sdk.openapi.legacy.CommonAPI.CAPITAL.s;
 
 public class MainActivity extends BaseActivity implements MainView {
 
@@ -50,6 +48,9 @@ public class MainActivity extends BaseActivity implements MainView {
     private MainStatusAdapter mainStatusAdapter;
     private List<Status> data;
     private int pageNum = 1;
+    private int count = 0;
+    private long firClick;
+    private long secClick;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,25 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     protected void eventInit() {
+        binding.appBarMain.toolbar.toolbar.setOnClickListener(v -> {
+            count ++;
+            if (count == 1) {
+                firClick = System.currentTimeMillis();
+                binding.appBarMain.contentMain.recycler.scrollToPosition(0);
+            } else if (count == 2) {
+                secClick = System.currentTimeMillis();
+                if (secClick - firClick < 1000) {
+                    mainPresenter.getStatusList(new StatusesAPI(this, Constants.APP_KEY, mAccessToken), 1);
+                    onRefresh();
+                    count = 0;
+                } else {
+                    count = 1;
+                    firClick = System.currentTimeMillis();
+                    binding.appBarMain.contentMain.recycler.scrollToPosition(0);
+                }
+            }
+
+        });
         binding.menu.getHeaderView(0).findViewById(R.id.user_heard)
                 .setOnClickListener(v -> {
                     Intent intent = new Intent(this, UserHomeActivity.class);

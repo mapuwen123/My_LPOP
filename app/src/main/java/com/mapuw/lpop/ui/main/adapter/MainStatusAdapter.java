@@ -1,7 +1,7 @@
 package com.mapuw.lpop.ui.main.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
@@ -12,16 +12,15 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.SimpleTarget;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.mapuw.lpop.R;
-import com.mapuw.lpop.utils.LogUtil;
+import com.mapuw.lpop.bean.ShortUrlBean;
+import com.mapuw.lpop.bean.Status;
+import com.mapuw.lpop.ui.comments.CommentsActivity;
 import com.mapuw.lpop.utils.TimeUtils;
 import com.mapuw.lpop.utils.glide.GlideCircleTransform;
 import com.mapuw.lpop.widget.emojitextview.WeiBoContentTextUtil;
-import com.sina.weibo.sdk.openapi.models.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,11 +66,18 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
         }
         //图片
         RecyclerView weiboIMGView = baseViewHolder.getView(R.id.weibo_image);
-        imageAdapterInit(weiboIMGView, status.bmiddle_urls, status.original_urls);
+        imageAdapterInit(context, weiboIMGView, status.bmiddle_urls, status.original_urls);
         //转发 评论 点赞
         baseViewHolder.setText(R.id.redirect, status.reposts_count + "");
         baseViewHolder.setText(R.id.comment, status.comments_count + "");
         baseViewHolder.setText(R.id.feedlike, status.attitudes_count + "");
+        //转发 评论 点击事件
+        baseViewHolder.getView(R.id.bottombar_retweet)
+                .setOnClickListener(new OnCommentsClickListener(status));
+        baseViewHolder.getView(R.id.bottombar_comment)
+                .setOnClickListener(new OnCommentsClickListener(status));
+        baseViewHolder.getView(R.id.origin_weibo_layout)
+                .setOnClickListener(new OnCommentsClickListener(status));
 
         //转发原文
         if (status.retweeted_status != null) {
@@ -93,11 +99,18 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
             baseViewHolder.setText(R.id.origin_nameAndcontent, origin_ss);
             //图片
             RecyclerView origin_IMGView = baseViewHolder.getView(R.id.origin_imageList);
-            imageAdapterInit(origin_IMGView, status.retweeted_status.bmiddle_urls, status.retweeted_status.original_urls);
+            imageAdapterInit(context, origin_IMGView, status.retweeted_status.bmiddle_urls, status.retweeted_status.original_urls);
             //转发 评论 点赞
             baseViewHolder.setText(R.id.redirect, status.retweeted_status.reposts_count + "");
             baseViewHolder.setText(R.id.comment, status.retweeted_status.comments_count + "");
             baseViewHolder.setText(R.id.feedlike, status.retweeted_status.attitudes_count + "");
+            //转发 评论 点击事件
+            baseViewHolder.getView(R.id.bottombar_retweet)
+                    .setOnClickListener(new OnCommentsClickListener(status.retweeted_status));
+            baseViewHolder.getView(R.id.bottombar_comment)
+                    .setOnClickListener(new OnCommentsClickListener(status.retweeted_status));
+            baseViewHolder.getView(R.id.origin_weibo_layout)
+                    .setOnClickListener(new OnCommentsClickListener(status.retweeted_status));
         } else {
             baseViewHolder.getView(R.id.retweetStatus_layout).setVisibility(View.GONE);
         }
@@ -105,11 +118,12 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
 
     /**
      * 九宫格图片适配器初始化
+     *
      * @param IMGSView（容器View）
      * @param pic_urls（缩略图列表）
      * @param bmiddle_urls（原图列表）
      */
-    public void imageAdapterInit(RecyclerView IMGSView, List<String> pic_urls, List<String> bmiddle_urls) {
+    public static void imageAdapterInit(Context context, RecyclerView IMGSView, List<String> pic_urls, List<String> bmiddle_urls) {
         int line = 3;
         WeiBoImageAdapter weiBoImageAdapter;
         if (pic_urls != null && pic_urls.size() > 0) {
@@ -126,12 +140,28 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
             bmiddle_urls = new ArrayList<>();
             weiBoImageAdapter = new WeiBoImageAdapter(context, R.layout.mainfragment_weiboitem_imageitem, pic_urls, bmiddle_urls);
         }
-        IMGSView.setLayoutManager(new GridLayoutManager(this.context, line));
+        IMGSView.setLayoutManager(new GridLayoutManager(context, line));
         IMGSView.setAdapter(weiBoImageAdapter);
     }
 
     @Override
     public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
         super.setOnLoadMoreListener(requestLoadMoreListener);
+    }
+
+    public class OnCommentsClickListener implements View.OnClickListener {
+        private Status status;
+
+        public OnCommentsClickListener(Status status) {
+            this.status = status;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(context, CommentsActivity.class);
+            ShortUrlBean s = new ShortUrlBean();
+            intent.putExtra("STATUS", status);
+            context.startActivity(intent);
+        }
     }
 }

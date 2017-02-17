@@ -6,10 +6,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +26,6 @@ import com.mapuw.lpop.utils.LogUtil;
 import com.mapuw.lpop.utils.SaveImgUtil;
 import com.mapuw.lpop.utils.ToastUtil;
 import com.shizhefei.view.largeimage.LargeImageView;
-import com.shizhefei.view.largeimage.factory.FileBitmapDecoderFactory;
 
 import java.io.File;
 import java.util.List;

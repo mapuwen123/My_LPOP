@@ -18,13 +18,15 @@ package com.sina.weibo.sdk.openapi.models;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * 微博可见性结构体。
  * 
  * @author SINA
  * @since 2013-11-24
  */
-public class Visible {
+public class Visible implements Serializable {
     
     public static final int VISIBLE_NORMAL  = 0;
     public static final int VISIBLE_PRIVACY = 1;

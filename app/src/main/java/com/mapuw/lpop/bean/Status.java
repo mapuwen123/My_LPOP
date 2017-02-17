@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-package com.sina.weibo.sdk.openapi.models;
+package com.mapuw.lpop.bean;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+import com.sina.weibo.sdk.openapi.models.Geo;
+import com.sina.weibo.sdk.openapi.models.User;
+import com.sina.weibo.sdk.openapi.models.Visible;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import static android.R.attr.thumbnail;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * 微博结构体。
