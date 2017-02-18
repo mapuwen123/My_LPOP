@@ -4,11 +4,14 @@ package com.mapuw.lpop.ui.main;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,6 +22,7 @@ import com.mapuw.lpop.base.BaseActivity;
 import com.mapuw.lpop.bean.Status;
 import com.mapuw.lpop.config.Constants;
 import com.mapuw.lpop.databinding.ActivityMainBinding;
+import com.mapuw.lpop.ui.login.LoginActivity;
 import com.mapuw.lpop.ui.main.adapter.MainStatusAdapter;
 import com.mapuw.lpop.ui.userhome.UserHomeActivity;
 import com.mapuw.lpop.utils.AccessTokenKeeper;
@@ -78,14 +82,6 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     protected void dataInit() {
         mainPresenter = new MainPresenter(this);
-        mAccessToken = AccessTokenKeeper.readAccessToken(this);
-        if (mAccessToken != null && mAccessToken.isSessionValid()) {
-            mainPresenter.getUserMSG(mAccessToken, new UsersAPI(this, Constants.APP_KEY, mAccessToken));
-            mainPresenter.getStatusList(new StatusesAPI(this, Constants.APP_KEY, mAccessToken), 1);
-            onRefresh();
-        } else {
-            showError("\"Access Token 不存在，请先登录\"");
-        }
 
         data = new ArrayList<>();
         mainStatusAdapter = new MainStatusAdapter(this, R.layout.home_weiboitem_original_pictext, data);
@@ -111,12 +107,22 @@ public class MainActivity extends BaseActivity implements MainView {
                 }
             }
         });
+
+        mAccessToken = AccessTokenKeeper.readAccessToken(this);
+        if (mAccessToken != null && mAccessToken.isSessionValid()) {
+            mainPresenter.getUserMSG(mAccessToken, new UsersAPI(this, Constants.APP_KEY, mAccessToken));
+            mainPresenter.getStatusList(new StatusesAPI(this, Constants.APP_KEY, mAccessToken), 1);
+            onRefresh();
+        } else {
+            showError("\"Access Token 不存在，请先登录\"");
+        }
     }
 
     @Override
     protected void eventInit() {
+        //toolbar单击置顶，双击刷新
         binding.appBarMain.toolbar.toolbar.setOnClickListener(v -> {
-            count ++;
+            count++;
             if (count == 1) {
                 firClick = System.currentTimeMillis();
                 binding.appBarMain.contentMain.recycler.scrollToPosition(0);
@@ -134,19 +140,34 @@ public class MainActivity extends BaseActivity implements MainView {
             }
 
         });
+        //抽屉头部点击
         binding.menu.getHeaderView(0).findViewById(R.id.user_heard)
                 .setOnClickListener(v -> {
                     Intent intent = new Intent(this, UserHomeActivity.class);
                     intent.putExtra("USER", this.user);
                     startActivity(intent);
                 });
+        //刷新
         binding.appBarMain.contentMain.swipeRefresh.setOnRefreshListener(() -> {
             pageNum = 1;
             mainPresenter.getStatusList(new StatusesAPI(MainActivity.this, Constants.APP_KEY, mAccessToken), 1);
         });
+        //加载更多
         mainStatusAdapter.setOnLoadMoreListener(() -> {
-            pageNum = ++ pageNum ;
+            pageNum = ++pageNum;
             mainPresenter.getStatusList(new StatusesAPI(MainActivity.this, Constants.APP_KEY, mAccessToken), pageNum);
+        });
+        //抽屉item点击事件
+        binding.menu.setNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.nav_send:
+                    AccessTokenKeeper.clear(this);
+                    Intent intent = new Intent(this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                    break;
+            }
+            return true;
         });
     }
 
@@ -176,13 +197,12 @@ public class MainActivity extends BaseActivity implements MainView {
             this.data.addAll(data);
             mainStatusAdapter.notifyDataSetChanged();
         } else {
-            if (data.size() < 20) {
-                mainStatusAdapter.addData(data);
-                mainStatusAdapter.loadMoreEnd();
-            } else {
-                mainStatusAdapter.addData(data);
-                mainStatusAdapter.loadMoreComplete();
-            }
+            mainStatusAdapter.addData(data);
+        }
+        if (data.size() < 20) {
+            mainStatusAdapter.loadMoreEnd();
+        } else {
+            mainStatusAdapter.loadMoreComplete();
         }
     }
 
