@@ -2,6 +2,7 @@ package com.mapuw.lpop.ui.comments.adapter;
 
 import android.content.Context;
 import android.text.SpannableStringBuilder;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -53,11 +54,23 @@ public class CommentsAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
                 baseViewHolder.getView(R.id.weibo_Content));
         baseViewHolder.setText(R.id.weibo_Content, this_ss);
         if (comment.reply_comment != null) {
+            baseViewHolder.getView(R.id.retweetStatus_layout).setVisibility(View.VISIBLE);
             //文字
-            SpannableStringBuilder this_ss_reply = WeiBoContentTextUtil.getWeiBoContent(comment.reply_comment.text,
-                    context,
-                    baseViewHolder.getView(R.id.origin_nameAndcontent));
-            baseViewHolder.setText(R.id.origin_nameAndcontent, this_ss_reply);
+            SpannableStringBuilder origin_ss;
+            //转发原文被删除的情况下做判空处理
+            if (comment.reply_comment.user != null) {
+                origin_ss = WeiBoContentTextUtil.getWeiBoContent(
+                        "@" + comment.reply_comment.user.screen_name + ":" + comment.reply_comment.text,
+                        context,
+                        baseViewHolder.getView(R.id.origin_nameAndcontent));
+            } else {
+                origin_ss = WeiBoContentTextUtil.getWeiBoContent(
+                        comment.reply_comment.text,
+                        context,
+                        baseViewHolder.getView(R.id.origin_nameAndcontent));
+            }
+        } else {
+            baseViewHolder.getView(R.id.retweetStatus_layout).setVisibility(View.GONE);
         }
     }
 }
