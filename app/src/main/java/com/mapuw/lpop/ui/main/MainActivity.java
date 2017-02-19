@@ -192,17 +192,19 @@ public class MainActivity extends BaseActivity implements MainView {
 
     @Override
     public void updateStatusList(List<Status> data) {
-        if (pageNum == 1) {
-            this.data.clear();
-            this.data.addAll(data);
-            mainStatusAdapter.notifyDataSetChanged();
-        } else {
-            mainStatusAdapter.addData(data);
-        }
-        if (data.size() < 20) {
-            mainStatusAdapter.loadMoreEnd();
-        } else {
-            mainStatusAdapter.loadMoreComplete();
+        if (data != null) {
+            if (pageNum == 1) {
+                this.data.clear();
+                this.data.addAll(data);
+                mainStatusAdapter.notifyDataSetChanged();
+            } else {
+                mainStatusAdapter.addData(data);
+            }
+            if (data.size() < 20) {
+                mainStatusAdapter.loadMoreEnd();
+            } else {
+                mainStatusAdapter.loadMoreComplete();
+            }
         }
     }
 

@@ -14,6 +14,7 @@ import com.mapuw.lpop.bean.Status;
 import com.mapuw.lpop.databinding.ActivityCommentsBinding;
 import com.mapuw.lpop.ui.comments.adapter.CommentsAdapter;
 import com.mapuw.lpop.ui.main.adapter.MainStatusAdapter;
+import com.mapuw.lpop.utils.LogUtil;
 import com.mapuw.lpop.utils.TimeUtils;
 import com.mapuw.lpop.utils.ToastUtil;
 import com.mapuw.lpop.utils.glide.GlideCircleTransform;
@@ -59,30 +60,30 @@ public class CommentsActivity extends BaseActivity implements CommentsView {
         status = (Status) getIntent().getSerializableExtra("STATUS");
         commentsPresenter = new CommentsPresenter(this, this);
 
-        //文字
-        SpannableStringBuilder this_ss = WeiBoContentTextUtil.getWeiBoContent(status.text,
-                this,
-                binding.msg.weiboContent);
-        binding.msg.weiboContent.setText(this_ss);
-        //头像
-        Glide.with(this)
-                .load(status.user.profile_image_url)
-                .transform(new GlideCircleTransform(this))
-                .priority(Priority.HIGH)
-                .into(binding.msg.titlebar.headImg.profileImg);
-        //昵称
-        binding.msg.titlebar.profileName.setText(status.user.screen_name);
-        //时间
-        binding.msg.titlebar.profileTime.setText(TimeUtils.instance(this).buildTimeString(status.created_at) + "  ");
-        //来源
-        if (status.source != null && status.source.length() > 0) {
-            binding.msg.titlebar.weiboComeFrom.setText("来自 " + status.source.split(">")[1].substring(0,
-                    status.source.split(">")[1].length() - 3));
-        } else {
-            binding.msg.titlebar.weiboComeFrom.setText("");
-        }
-        //图片
-        MainStatusAdapter.imageAdapterInit(this, binding.msg.weiboImage, status.bmiddle_urls, status.original_urls);
+//        //文字
+//        SpannableStringBuilder this_ss = WeiBoContentTextUtil.getWeiBoContent(status.text,
+//                this,
+//                binding.msg.weiboContent);
+//        binding.msg.weiboContent.setText(this_ss);
+//        //头像
+//        Glide.with(this)
+//                .load(status.user.profile_image_url)
+//                .transform(new GlideCircleTransform(this))
+//                .priority(Priority.HIGH)
+//                .into(binding.msg.titlebar.headImg.profileImg);
+//        //昵称
+//        binding.msg.titlebar.profileName.setText(status.user.screen_name);
+//        //时间
+//        binding.msg.titlebar.profileTime.setText(TimeUtils.instance(this).buildTimeString(status.created_at) + "  ");
+//        //来源
+//        if (status.source != null && status.source.length() > 0) {
+//            binding.msg.titlebar.weiboComeFrom.setText("来自 " + status.source.split(">")[1].substring(0,
+//                    status.source.split(">")[1].length() - 3));
+//        } else {
+//            binding.msg.titlebar.weiboComeFrom.setText("");
+//        }
+//        //图片
+//        MainStatusAdapter.imageAdapterInit(this, binding.msg.weiboImage, status.bmiddle_urls, status.original_urls);
 
         data = new ArrayList<Comment>();
         adapter = new CommentsAdapter(this, R.layout.comments_item, data);
@@ -131,22 +132,25 @@ public class CommentsActivity extends BaseActivity implements CommentsView {
 
     @Override
     public void updateCommentsList(List<Comment> data) {
-        if (page == 1) {
-            this.data.clear();
-            this.data.addAll(data);
-            adapter.notifyDataSetChanged();
-        } else {
-            adapter.addData(data);
-        }
-        if (data.size() < 50) {
-            adapter.loadMoreEnd();
-        } else {
-            adapter.loadMoreComplete();
+        if (data != null) {
+            if (page == 1) {
+                this.data.clear();
+                this.data.addAll(data);
+                adapter.notifyDataSetChanged();
+            } else {
+                adapter.addData(data);
+            }
+            if (data.size() < 50) {
+                adapter.loadMoreEnd();
+            } else {
+                adapter.loadMoreComplete();
+            }
         }
     }
 
     @Override
     public void showError(String msg) {
+        LogUtil.d("ERROR", "ERROR:" + msg);
         ToastUtil.showShort(this, msg);
     }
 

@@ -1,6 +1,7 @@
 package com.mapuw.lpop.ui.comments.adapter;
 
 import android.content.Context;
+import android.text.SpannableStringBuilder;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -8,7 +9,9 @@ import com.bumptech.glide.Priority;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.mapuw.lpop.R;
+import com.mapuw.lpop.utils.TimeUtils;
 import com.mapuw.lpop.utils.glide.GlideCircleTransform;
+import com.mapuw.lpop.widget.emojitextview.WeiBoContentTextUtil;
 import com.sina.weibo.sdk.openapi.models.Comment;
 
 import java.util.List;
@@ -33,5 +36,28 @@ public class CommentsAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
                 .transform(new GlideCircleTransform(context))
                 .priority(Priority.HIGH)
                 .into((ImageView) baseViewHolder.getView(R.id.profile_img));
+        //昵称
+        baseViewHolder.setText(R.id.profile_name, comment.user.screen_name);
+        //时间
+        baseViewHolder.setText(R.id.profile_time, TimeUtils.instance(context).buildTimeString(comment.created_at) + "  ");
+        //来源
+        if (comment.source != null && comment.source.length() > 0) {
+            baseViewHolder.setText(R.id.weiboComeFrom, "来自 " + comment.source.split(">")[1].substring(0,
+                    comment.source.split(">")[1].length() - 3));
+        } else {
+            baseViewHolder.setText(R.id.weiboComeFrom, "");
+        }
+        //文字
+        SpannableStringBuilder this_ss = WeiBoContentTextUtil.getWeiBoContent(comment.text,
+                context,
+                baseViewHolder.getView(R.id.weibo_Content));
+        baseViewHolder.setText(R.id.weibo_Content, this_ss);
+        if (comment.reply_comment != null) {
+            //文字
+            SpannableStringBuilder this_ss_reply = WeiBoContentTextUtil.getWeiBoContent(comment.reply_comment.text,
+                    context,
+                    baseViewHolder.getView(R.id.origin_nameAndcontent));
+            baseViewHolder.setText(R.id.origin_nameAndcontent, this_ss_reply);
+        }
     }
 }
