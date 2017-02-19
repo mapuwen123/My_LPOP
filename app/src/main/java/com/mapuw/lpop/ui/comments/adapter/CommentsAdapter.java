@@ -56,19 +56,20 @@ public class CommentsAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
         if (comment.reply_comment != null) {
             baseViewHolder.getView(R.id.retweetStatus_layout).setVisibility(View.VISIBLE);
             //文字
-            SpannableStringBuilder origin_ss;
+            SpannableStringBuilder reply_ss;
             //转发原文被删除的情况下做判空处理
             if (comment.reply_comment.user != null) {
-                origin_ss = WeiBoContentTextUtil.getWeiBoContent(
+                reply_ss = WeiBoContentTextUtil.getWeiBoContent(
                         "@" + comment.reply_comment.user.screen_name + ":" + comment.reply_comment.text,
                         context,
                         baseViewHolder.getView(R.id.origin_nameAndcontent));
             } else {
-                origin_ss = WeiBoContentTextUtil.getWeiBoContent(
+                reply_ss = WeiBoContentTextUtil.getWeiBoContent(
                         comment.reply_comment.text,
                         context,
                         baseViewHolder.getView(R.id.origin_nameAndcontent));
             }
+            baseViewHolder.setText(R.id.origin_nameAndcontent, reply_ss);
         } else {
             baseViewHolder.getView(R.id.retweetStatus_layout).setVisibility(View.GONE);
         }
