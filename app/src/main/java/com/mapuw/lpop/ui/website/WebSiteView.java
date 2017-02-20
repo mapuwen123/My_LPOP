@@ -6,6 +6,7 @@ package com.mapuw.lpop.ui.website;
 
 public interface WebSiteView {
     void showMessage(String msg);
+    void showError(String e);
     interface OperationListener {
         void onStart(String status);
         void onComplete(String status);

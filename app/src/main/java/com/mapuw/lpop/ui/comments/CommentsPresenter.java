@@ -2,7 +2,9 @@ package com.mapuw.lpop.ui.comments;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.view.View;
 
+import com.mapuw.lpop.utils.NetUtil;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
 import com.sina.weibo.sdk.openapi.models.CommentList;
@@ -15,13 +17,19 @@ public class CommentsPresenter implements RequestListener {
     private CommentsModel commentsModel;
     private CommentsView commentsView;
 
-    public CommentsPresenter(Context context, CommentsView commentsView) {
-        this.commentsModel = new CommentsModel(context);
+    public CommentsPresenter(CommentsView commentsView) {
+        this.commentsModel = new CommentsModel((Context) commentsView);
         this.commentsView = commentsView;
     }
 
-    public void getComments(long id, int page) {
-        commentsModel.getComments(id, page, this);
+    public void getComments(long id, int page, View view) {
+        if (NetUtil.isConnected((Context) commentsView)) {
+            commentsModel.getComments(id, page, this);
+            commentsView.onRefresh();
+        } else {
+            NetUtil.showNetSetSnack((Context) commentsView, view);
+            commentsView.offRefresh();
+        }
     }
 
     @Override

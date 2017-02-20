@@ -28,6 +28,7 @@ public class WebSiteModel {
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setDestinationInExternalPublicDir("LPOP/Download", url.split("/")[url.split("/").length - 1]);
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
         long downloadId = downloadManager.enqueue(request);
         webview.goBack();
         operation.onStart("开始下载任务...");
@@ -46,6 +47,7 @@ public class WebSiteModel {
         @Override
         public void onReceive(Context context, Intent intent) {
             this.operation.onComplete("下载完成");
+            context.unregisterReceiver(this);
         }
     }
 

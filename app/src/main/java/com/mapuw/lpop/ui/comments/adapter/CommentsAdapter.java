@@ -74,4 +74,5 @@ public class CommentsAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
             baseViewHolder.getView(R.id.retweetStatus_layout).setVisibility(View.GONE);
         }
     }
+
 }

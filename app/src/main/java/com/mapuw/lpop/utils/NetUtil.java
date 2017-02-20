@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.provider.Settings;
+import android.view.View;
 
 /**
  * 与网络相关的工具类
@@ -64,11 +66,14 @@ public class NetUtil {
      */
     public static void openSetting(Activity activity)
     {
-        Intent intent = new Intent("/");
-        ComponentName cm = new ComponentName("com.android.settings",
-                "com.android.settings.WirelessSettings");
-        intent.setComponent(cm);
-        intent.setAction("android.intent.action.VIEW");
+        Intent intent = new Intent(Settings.ACTION_WIFI_SETTINGS);
         activity.startActivityForResult(intent, 0);
+    }
+
+    public static void showNetSetSnack(Context context, View view) {
+        SnackUtil.showShort(context, view, "请检查当前网路状态!")
+                .setAction("打开设置", v -> {
+                    openSetting((Activity) context);
+                }).show();
     }
 }

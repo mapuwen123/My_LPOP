@@ -72,8 +72,6 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
         baseViewHolder.setText(R.id.comment, status.comments_count + "");
         baseViewHolder.setText(R.id.feedlike, status.attitudes_count + "");
         //转发 评论 点击事件
-        baseViewHolder.getView(R.id.bottombar_retweet)
-                .setOnClickListener(new OnCommentsClickListener(status));
         baseViewHolder.getView(R.id.bottombar_comment)
                 .setOnClickListener(new OnCommentsClickListener(status));
         baseViewHolder.getView(R.id.origin_weibo_layout)
@@ -105,8 +103,6 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
             baseViewHolder.setText(R.id.comment, status.retweeted_status.comments_count + "");
             baseViewHolder.setText(R.id.feedlike, status.retweeted_status.attitudes_count + "");
             //转发 评论 点击事件
-            baseViewHolder.getView(R.id.bottombar_retweet)
-                    .setOnClickListener(new OnCommentsClickListener(status.retweeted_status));
             baseViewHolder.getView(R.id.bottombar_comment)
                     .setOnClickListener(new OnCommentsClickListener(status.retweeted_status));
             baseViewHolder.getView(R.id.origin_weibo_layout)
@@ -142,11 +138,6 @@ public class MainStatusAdapter extends BaseQuickAdapter<Status, BaseViewHolder> 
         }
         IMGSView.setLayoutManager(new GridLayoutManager(context, line));
         IMGSView.setAdapter(weiBoImageAdapter);
-    }
-
-    @Override
-    public void setOnLoadMoreListener(RequestLoadMoreListener requestLoadMoreListener) {
-        super.setOnLoadMoreListener(requestLoadMoreListener);
     }
 
     public class OnCommentsClickListener implements View.OnClickListener {

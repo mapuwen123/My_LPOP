@@ -22,7 +22,7 @@ public class CommentsModel {
         api.show(id
                 , 0
                 , 0
-                , 50
+                , 25
                 , page
                 , 0
                 , listener);

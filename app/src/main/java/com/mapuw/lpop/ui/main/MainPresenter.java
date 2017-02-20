@@ -1,8 +1,11 @@
 package com.mapuw.lpop.ui.main;
 
+import android.content.Context;
 import android.text.TextUtils;
+import android.view.View;
 
 import com.mapuw.lpop.bean.StatusList;
+import com.mapuw.lpop.utils.NetUtil;
 import com.sina.weibo.sdk.auth.Oauth2AccessToken;
 import com.sina.weibo.sdk.exception.WeiboException;
 import com.sina.weibo.sdk.net.RequestListener;
@@ -28,11 +31,19 @@ public class MainPresenter implements RequestListener {
     }
 
     void getUserMSG(Oauth2AccessToken mAccessToken, UsersAPI usersAPI) {
-        mainModel.getUserMSG(mAccessToken, usersAPI, this);
+        if (NetUtil.isConnected((Context) mainView)) {
+            mainModel.getUserMSG(mAccessToken, usersAPI, this);
+        }
     }
 
-    void getStatusList(StatusesAPI statusesAPI, int pageNum) {
-        mainModel.getStatusList(statusesAPI, pageNum, this);
+    void getStatusList(StatusesAPI statusesAPI, int pageNum, View view) {
+        if (NetUtil.isConnected((Context) mainView)) {
+            mainModel.getStatusList(statusesAPI, pageNum, this);
+            mainView.onRefresh();
+        } else {
+            NetUtil.showNetSetSnack((Context) mainView, view);
+            mainView.offRefresh();
+        }
     }
 
     @Override

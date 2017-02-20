@@ -2,6 +2,7 @@ package com.mapuw.lpop.ui.website;
 
 import android.content.Context;
 
+import com.mapuw.lpop.utils.NetUtil;
 import com.mapuw.lpop.widget.webview.ProgressWebView;
 
 /**
@@ -25,7 +26,12 @@ public class WebSitePresenter implements WebSiteView.OperationListener {
      * @param webview
      */
     void doDownload(Context context, String url, ProgressWebView webview) {
-        this.webSiteModel.doDownload(context, url, webview, this);
+
+        if (NetUtil.isConnected((Context) webSiteView)) {
+            this.webSiteModel.doDownload(context, url, webview, this);
+        } else {
+            webSiteView.showError("请检查当前网路状态!");
+        }
     }
 
     @Override

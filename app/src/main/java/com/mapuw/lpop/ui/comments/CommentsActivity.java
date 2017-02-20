@@ -1,24 +1,29 @@
 package com.mapuw.lpop.ui.comments;
 
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
+import android.view.LayoutInflater;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.mapuw.lpop.R;
 import com.mapuw.lpop.base.BaseActivity;
 import com.mapuw.lpop.bean.Status;
+import com.mapuw.lpop.config.Constants;
 import com.mapuw.lpop.databinding.ActivityCommentsBinding;
 import com.mapuw.lpop.ui.comments.adapter.CommentsAdapter;
+import com.mapuw.lpop.ui.main.MainActivity;
 import com.mapuw.lpop.ui.main.adapter.MainStatusAdapter;
 import com.mapuw.lpop.utils.LogUtil;
 import com.mapuw.lpop.utils.TimeUtils;
 import com.mapuw.lpop.utils.ToastUtil;
 import com.mapuw.lpop.utils.glide.GlideCircleTransform;
 import com.mapuw.lpop.widget.emojitextview.WeiBoContentTextUtil;
+import com.sina.weibo.sdk.openapi.StatusesAPI;
 import com.sina.weibo.sdk.openapi.models.Comment;
 
 import java.util.ArrayList;
@@ -51,14 +56,14 @@ public class CommentsActivity extends BaseActivity implements CommentsView {
     protected void appBarInit() {
         setSupportActionBar(binding.toolbar.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("微博正文");
+        getSupportActionBar().setTitle("评论");
         binding.toolbar.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     @Override
     protected void dataInit() {
         status = (Status) getIntent().getSerializableExtra("STATUS");
-        commentsPresenter = new CommentsPresenter(this, this);
+        commentsPresenter = new CommentsPresenter(this);
 
 //        //文字
 //        SpannableStringBuilder this_ss = WeiBoContentTextUtil.getWeiBoContent(status.text,
@@ -87,12 +92,13 @@ public class CommentsActivity extends BaseActivity implements CommentsView {
 
         data = new ArrayList<Comment>();
         adapter = new CommentsAdapter(this, R.layout.comments_item, data);
+        adapter.setEnableLoadMore(true);
+        adapter.setEmptyView(LayoutInflater.from(this).inflate(R.layout.comment_null, null));
         adapter.openLoadAnimation();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setAutoMeasureEnabled(true);
         binding.commentsRlv.setLayoutManager(linearLayoutManager);
         binding.commentsRlv.setHasFixedSize(true);
-        binding.commentsRlv.setNestedScrollingEnabled(false);
         binding.commentsRlv.setAdapter(adapter);
         binding.commentsRlv.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -113,20 +119,19 @@ public class CommentsActivity extends BaseActivity implements CommentsView {
             }
         });
 
-        commentsPresenter.getComments(Long.parseLong(status.id), 1);
-        onRefresh();
+        commentsPresenter.getComments(Long.parseLong(status.id), 1, binding.appBarMain);
     }
 
     @Override
     protected void eventInit() {
         binding.swipeRefresh.setOnRefreshListener(() -> {
             page = 1;
-            commentsPresenter.getComments(Long.parseLong(status.id), page);
+            commentsPresenter.getComments(Long.parseLong(status.id), page, binding.appBarMain);
         });
 
         adapter.setOnLoadMoreListener(() -> {
             page = ++page;
-            commentsPresenter.getComments(Long.parseLong(status.id), page);
+            commentsPresenter.getComments(Long.parseLong(status.id), page, binding.appBarMain);
         });
     }
 
@@ -140,11 +145,13 @@ public class CommentsActivity extends BaseActivity implements CommentsView {
             } else {
                 adapter.addData(data);
             }
-            if (data.size() < 50) {
+            if (data.size() < 25) {
                 adapter.loadMoreEnd();
             } else {
                 adapter.loadMoreComplete();
             }
+        } else {
+            adapter.loadMoreEnd();
         }
     }
 
@@ -162,5 +169,15 @@ public class CommentsActivity extends BaseActivity implements CommentsView {
     @Override
     public void offRefresh() {
         binding.swipeRefresh.setRefreshing(false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 0) {
+            onRefresh();
+            page = 1;
+            commentsPresenter.getComments(Long.parseLong(status.id), page, binding.appBarMain);
+        }
     }
 }

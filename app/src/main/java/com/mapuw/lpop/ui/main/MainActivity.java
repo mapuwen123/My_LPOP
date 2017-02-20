@@ -4,14 +4,11 @@ package com.mapuw.lpop.ui.main;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -85,6 +82,7 @@ public class MainActivity extends BaseActivity implements MainView {
 
         data = new ArrayList<>();
         mainStatusAdapter = new MainStatusAdapter(this, R.layout.home_weiboitem_original_pictext, data);
+        mainStatusAdapter.setEnableLoadMore(true);
         mainStatusAdapter.openLoadAnimation();
         binding.appBarMain.contentMain.recycler.setLayoutManager(new LinearLayoutManager(this));
         binding.appBarMain.contentMain.recycler.addItemDecoration(new RecycleViewDivider(this, LinearLayoutManager.VERTICAL));
@@ -111,8 +109,7 @@ public class MainActivity extends BaseActivity implements MainView {
         mAccessToken = AccessTokenKeeper.readAccessToken(this);
         if (mAccessToken != null && mAccessToken.isSessionValid()) {
             mainPresenter.getUserMSG(mAccessToken, new UsersAPI(this, Constants.APP_KEY, mAccessToken));
-            mainPresenter.getStatusList(new StatusesAPI(this, Constants.APP_KEY, mAccessToken), 1);
-            onRefresh();
+            mainPresenter.getStatusList(new StatusesAPI(this, Constants.APP_KEY, mAccessToken), 1, binding.appBarMain.appBarMain);
         } else {
             showError("\"Access Token 不存在，请先登录\"");
         }
@@ -129,7 +126,7 @@ public class MainActivity extends BaseActivity implements MainView {
             } else if (count == 2) {
                 secClick = System.currentTimeMillis();
                 if (secClick - firClick < 1000) {
-                    mainPresenter.getStatusList(new StatusesAPI(this, Constants.APP_KEY, mAccessToken), 1);
+                    mainPresenter.getStatusList(new StatusesAPI(this, Constants.APP_KEY, mAccessToken), 1, binding.appBarMain.appBarMain);
                     onRefresh();
                     count = 0;
                 } else {
@@ -150,12 +147,12 @@ public class MainActivity extends BaseActivity implements MainView {
         //刷新
         binding.appBarMain.contentMain.swipeRefresh.setOnRefreshListener(() -> {
             pageNum = 1;
-            mainPresenter.getStatusList(new StatusesAPI(MainActivity.this, Constants.APP_KEY, mAccessToken), 1);
+            mainPresenter.getStatusList(new StatusesAPI(MainActivity.this, Constants.APP_KEY, mAccessToken), 1, binding.appBarMain.appBarMain);
         });
         //加载更多
         mainStatusAdapter.setOnLoadMoreListener(() -> {
             pageNum = ++pageNum;
-            mainPresenter.getStatusList(new StatusesAPI(MainActivity.this, Constants.APP_KEY, mAccessToken), pageNum);
+            mainPresenter.getStatusList(new StatusesAPI(MainActivity.this, Constants.APP_KEY, mAccessToken), pageNum, binding.appBarMain.appBarMain);
         });
         //抽屉item点击事件
         binding.menu.setNavigationItemSelectedListener(item -> {
@@ -205,6 +202,8 @@ public class MainActivity extends BaseActivity implements MainView {
             } else {
                 mainStatusAdapter.loadMoreComplete();
             }
+        } else {
+            mainStatusAdapter.loadMoreEnd();
         }
     }
 
@@ -221,5 +220,15 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void offRefresh() {
         binding.appBarMain.contentMain.swipeRefresh.setRefreshing(false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 0) {
+            onRefresh();
+            pageNum = 1;
+            mainPresenter.getStatusList(new StatusesAPI(MainActivity.this, Constants.APP_KEY, mAccessToken), pageNum, binding.appBarMain.appBarMain);
+        }
     }
 }

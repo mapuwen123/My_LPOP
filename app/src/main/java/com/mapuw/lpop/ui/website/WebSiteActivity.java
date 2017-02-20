@@ -90,6 +90,11 @@ public class WebSiteActivity extends BaseActivity implements WebSiteView, Toolba
     }
 
     @Override
+    public void showError(String e) {
+        ToastUtil.showShort(this, e);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_web_site_menu, menu);
         return true;
