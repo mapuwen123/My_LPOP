@@ -3,6 +3,8 @@ LPOP
 
   个人微博练习项目
   
+  下载链接：https://fir.im/6q9w
+  
 我的微博
 --------------------------------
 ![image-01.png](/images/Screenshot_2017-02-09-00-10-58-612_com.mapuw.lpop.png "image-01.png")
